@@ -2,6 +2,7 @@ import { IUser } from './users.interface'
 import { User } from './users.model'
 import { createID } from '../app/users.utils'
 import config from '../../config/index'
+import { logger } from '../../shared/logger'
 const createUser = async (user: IUser): Promise<IUser | null> => {
   // need a user id and password. A default id and password is given from the university admin
   const id = await createID()
@@ -13,9 +14,9 @@ const createUser = async (user: IUser): Promise<IUser | null> => {
   if (!createdUser) {
     throw new Error('failed to create a user')
   }
-  console.log('user:', createUser)
+  logger.info('user:', createUser)
   return createdUser
 }
-export default {
+export const UserServices = {
   createUser,
 }

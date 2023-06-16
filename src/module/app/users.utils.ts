@@ -1,10 +1,10 @@
 import { User } from './users.model'
-
+import { logger } from '../../shared/logger'
 export const createID = async () => {
   const previousId = (await getPreviousID()) || (0).toString().padStart(5, '0')
   const currentSerial = parseInt(previousId) + 1
   const currentId = currentSerial.toString().padStart(5, '0')
-  console.log('user current id is:', currentId)
+  logger.info(`user current id is: ${currentId}`)
   return currentId
 }
 const getPreviousID = async () => {
