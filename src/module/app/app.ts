@@ -14,7 +14,7 @@ app.use('/', userRoute)
 // customized error
 
 app.get('/', () => {
-  throw new ApiError(400, 'juct checking error')
+  Promise.reject(new ApiError(400, 'juct checking error'))
 })
 // global error handler
 app.use(globalErrorHandler)

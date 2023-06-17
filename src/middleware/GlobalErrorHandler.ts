@@ -4,6 +4,7 @@ import { IgenericError } from '../interfaces/errorInterface'
 import { handleValidationError } from '../errrorHandlers/validationErrorHandler'
 import { ApiError } from '../errrorHandlers/ApiErrorHandler'
 import { Error } from 'mongoose'
+import { errorLogger } from '../shared/logger'
 
 export const globalErrorHandler: ErrorRequestHandler = (
   err,
@@ -11,6 +12,11 @@ export const globalErrorHandler: ErrorRequestHandler = (
   res,
   next
 ) => {
+  if (config.env === 'development') {
+    console.log('global error handler:', err)
+  } else {
+    errorLogger.error('global error handler:', err)
+  }
   let statusCode = 500
   let message = 'something went wrong'
   let errorMessages: IgenericError[] = []
