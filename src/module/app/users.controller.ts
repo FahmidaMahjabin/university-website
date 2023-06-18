@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import { UserServices } from './users.service'
 import { logger } from '../../shared/logger'
+
 const createUserToDB = async (
   req: Request,
   res: Response,
