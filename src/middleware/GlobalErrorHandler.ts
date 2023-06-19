@@ -5,6 +5,8 @@ import { handleValidationError } from '../errrorHandlers/validationErrorHandler'
 import { ApiError } from '../errrorHandlers/ApiErrorHandler'
 import { Error } from 'mongoose'
 import { errorLogger } from '../shared/logger'
+import { ZodError } from 'zod'
+import zodErrorHandler from '../errrorHandlers/zodErrorHandler'
 
 export const globalErrorHandler: ErrorRequestHandler = (
   err,
@@ -36,6 +38,12 @@ export const globalErrorHandler: ErrorRequestHandler = (
           },
         ]
       : []
+  } else if (err instanceof ZodError) {
+    const simplifiedError = zodErrorHandler(err)
+    console.log('simplified error from global error handler:', simplifiedError)
+    statusCode = simplifiedError.statusCode
+    message = simplifiedError.message
+    errorMessages = simplifiedError.errorMessages
   } else if (err instanceof Error) {
     message = err?.message
     errorMessages = err?.message
