@@ -1,6 +1,6 @@
 import { IUser } from './users.interface'
 import { User } from './users.model'
-import { createID } from '../app/users.utils'
+import { createID } from './users.utils'
 import config from '../../config/index'
 import { logger } from '../../shared/logger'
 const createUser = async (user: IUser): Promise<IUser | null> => {
