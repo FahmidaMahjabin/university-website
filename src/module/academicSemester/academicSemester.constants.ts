@@ -16,4 +16,10 @@ export const month: Month[] = [
 ]
 
 export const title: Title[] = ['Autumn', 'Fall', 'Summer']
-export const code: Code[] = ['1', '2', '3']
+export const code: Code[] = ['01', '02', '03']
+
+export const titleAndCodeMapper: { [key: string]: string } = {
+  Autumn: '01',
+  Fall: '02',
+  Summer: '03',
+}

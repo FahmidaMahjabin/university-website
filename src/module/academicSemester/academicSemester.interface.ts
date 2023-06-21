@@ -13,7 +13,7 @@ export type Month =
   | 'November'
   | 'December'
 export type Title = 'Autumn' | 'Fall' | 'Summer'
-export type Code = '1' | '2' | '3'
+export type Code = '01' | '02' | '03'
 export type IAcademicSemester = {
   title: Title
   year: number
