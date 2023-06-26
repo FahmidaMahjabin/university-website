@@ -8,4 +8,6 @@ router.post(
   validateRequest(academicSemesterVedilation),
   academicSemesterController.createAcademicSemester
 )
+
+router.get('/get-semester', academicSemesterController.getAllSemester)
 export const academicSemesterRute = { router }

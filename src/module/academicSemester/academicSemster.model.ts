@@ -11,7 +11,7 @@ const academicSemesterSchema = new Schema<
   academicSemesterModel
 >({
   title: { type: String, enum: title, required: true },
-  year: { type: Number, required: true },
+  year: { type: String, required: true },
   code: { type: String, enum: code, required: true },
   startMonth: { type: String, enum: month, required: true },
   endMonth: { type: String, enum: month, required: true },

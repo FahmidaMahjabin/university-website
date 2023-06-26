@@ -23,3 +23,6 @@ export const titleAndCodeMapper: { [key: string]: string } = {
   Fall: '02',
   Summer: '03',
 }
+export const filterableFields = ['searchTerm', 'title', 'year', 'code']
+export const searchableFields = ['title', 'year', 'code']
+export const paginationFields = ['page', 'limit', 'sortBy', 'sortOrder']
