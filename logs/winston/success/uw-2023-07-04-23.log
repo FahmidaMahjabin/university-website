@@ -1,0 +1,4 @@
+Tue Jul 04 2023 23:13:26 [uw-success] error: error: querySrv ESERVFAIL _mongodb._tcp.cluster0.pqkpgrq.mongodb.net
+Tue Jul 04 2023 23:15:14 [uw-success] info: Example app listening on port 4000
+Tue Jul 04 2023 23:20:21 [uw-success] info: Example app listening on port 4000
+Tue Jul 04 2023 23:23:34 [uw-success] info: Example app listening on port 4000

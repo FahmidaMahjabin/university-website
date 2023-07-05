@@ -4,7 +4,7 @@ import validateRequest from '../../middleware/validateRequest'
 import { userValidation } from './users.validation'
 
 const router = express.Router()
-router.post(
+router.patch(
   '/create-user',
   validateRequest(userValidation.createUserZodSchema),
   UserController.createUserToDB

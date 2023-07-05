@@ -1,4 +1,4 @@
-import { ErrorRequestHandler } from 'express'
+import { ErrorRequestHandler, NextFunction, Request, Response } from 'express'
 import config from '../config'
 import { IgenericError } from '../interfaces/errorInterface'
 import { handleValidationError } from '../errrorHandlers/validationErrorHandler'
@@ -10,9 +10,9 @@ import zodErrorHandler from '../errrorHandlers/zodErrorHandler'
 
 export const globalErrorHandler: ErrorRequestHandler = (
   err,
-  req,
-  res,
-  next
+  req: Request,
+  res: Response,
+  next: NextFunction
 ) => {
   if (config.env === 'development') {
     console.log('global error handler:', err)
@@ -62,5 +62,4 @@ export const globalErrorHandler: ErrorRequestHandler = (
     errorMessages,
     stack: config.env == 'development' ? err?.stack : undefined,
   })
-  next()
 }

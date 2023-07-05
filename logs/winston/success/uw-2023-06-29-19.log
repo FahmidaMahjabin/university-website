@@ -1,0 +1,9 @@
+Thu Jun 29 2023 19:23:8 [uw-success] error: error: querySrv ESERVFAIL _mongodb._tcp.cluster0.pqkpgrq.mongodb.net
+Thu Jun 29 2023 19:23:24 [uw-success] error: error: querySrv ESERVFAIL _mongodb._tcp.cluster0.pqkpgrq.mongodb.net
+Thu Jun 29 2023 19:24:15 [uw-success] error: error: querySrv ESERVFAIL _mongodb._tcp.cluster0.pqkpgrq.mongodb.net
+Thu Jun 29 2023 19:24:46 [uw-success] error: error: querySrv ESERVFAIL _mongodb._tcp.cluster0.pqkpgrq.mongodb.net
+Thu Jun 29 2023 19:34:7 [uw-success] info: Example app listening on port 4000
+Thu Jun 29 2023 19:38:58 [uw-success] info: Example app listening on port 4000
+Thu Jun 29 2023 19:40:14 [uw-success] info: Example app listening on port 4000
+Thu Jun 29 2023 19:44:49 [uw-success] info: Example app listening on port 4000
+Thu Jun 29 2023 19:56:55 [uw-success] info: Example app listening on port 4000

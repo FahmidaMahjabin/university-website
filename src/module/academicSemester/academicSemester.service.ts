@@ -104,7 +104,9 @@ const getAllSemesterFromBD = async (
   if (sortBy && sortOrder) {
     sortOption[sortBy] = sortOrder
   }
-  const result = await AcademicSemester.find({ $and: andConditions })
+  // search condition
+  const whereCondition = andConditions.length > 0 ? { $and: andConditions } : {}
+  const result = await AcademicSemester.find(whereCondition)
     .sort(sortOption)
     .skip(skip)
     .limit(limit)
@@ -118,7 +120,44 @@ const getAllSemesterFromBD = async (
     data: result,
   }
 }
+
+// get one semester from BD
+const getOneSemesterFromBD = async (
+  id: string
+): Promise<IAcademicSemester | null> => {
+  const result = await AcademicSemester.findById(id)
+  return result
+}
+
+const deleteSemesterFromDB = async (
+  id: string
+): Promise<IAcademicSemester | null> => {
+  const result = await AcademicSemester.findByIdAndDelete(id)
+  return result
+}
+// update one semester
+const updateSemesterToBD = async (
+  id: string,
+  updateData: Partial<IAcademicSemester>
+): Promise<IAcademicSemester | null> => {
+  console.log('updatedData:', updateData)
+  if (updateData?.title && updateData?.code) {
+    if (titleAndCodeMapper[updateData.title] != updateData.code) {
+      throw new ApiError(406, 'not acceptable code for this title')
+    }
+  }
+
+  const result = await AcademicSemester.findOneAndUpdate(
+    { _id: id },
+    updateData,
+    { new: true }
+  )
+  return result
+}
 export const academicSemesterService = {
   createAcademicSemesterToDB,
   getAllSemesterFromBD,
+  getOneSemesterFromBD,
+  updateSemesterToBD,
+  deleteSemesterFromDB,
 }
