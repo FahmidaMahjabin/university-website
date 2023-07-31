@@ -4,25 +4,50 @@ import { logger } from '../../shared/logger'
 import { catchAsync } from '../../shared/catchAsync'
 import { sendResponse } from '../../shared/sendResponse'
 import { IUser } from './users.interface'
+import { IFaculty } from '../faculty/faculty.interface'
+import { IAdmin } from '../admin/admin.interface'
 
-const createUserToDB: RequestHandler = catchAsync(
+const createStudentToDB: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const data = await req.body
-    logger.info(`data from controller ${data}`)
-    const result = await UserServices.createUser(data)
-    // res.status(200).json({
-    //   success: true,
-    //   message: 'user created successfully',
-    // })
+    const { student, ...userData } = await req.body
+    logger.info(`data from controller ${student}, ${userData}`)
+    const result = await UserServices.createStudent(student, userData)
     sendResponse<IUser>(res, {
       statusCode: 200,
-      message: 'user created successfully',
+      success: true,
+      message: 'student created successfully',
       data: result,
     })
+  }
+)
 
-    next()
+const createFacultyToDB = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { faculty, ...userData } = await req.body
+    const result = await UserServices.createFaculty(faculty, userData)
+    sendResponse<IUser>(res, {
+      statusCode: 200,
+      success: true,
+      message: 'faculty created successfully',
+      data: result,
+    })
+  }
+)
+
+const createAdminToDB = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { admin, ...userData } = await req.body
+    const result = await UserServices.createAdmin(admin, userData)
+    sendResponse<IUser>(res, {
+      statusCode: 200,
+      success: true,
+      message: 'admin created successfully',
+      data: result,
+    })
   }
 )
 export const UserController = {
-  createUserToDB,
+  createStudentToDB,
+  createFacultyToDB,
+  createAdminToDB,
 }

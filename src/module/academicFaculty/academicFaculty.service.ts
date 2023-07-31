@@ -13,7 +13,11 @@ const createAcademicFacultyToBD = async (
   const result = await AcademicFaculty.create({ title: title })
   return result
 }
-
+const getAllFacultyFromDb = async (): Promise<IAcademicFaculty[]> => {
+  const result = await AcademicFaculty.find({})
+  return result
+}
 export const academicFacultyService = {
   createAcademicFacultyToBD,
+  getAllFacultyFromDb,
 }
