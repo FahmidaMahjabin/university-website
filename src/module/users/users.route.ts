@@ -20,4 +20,5 @@ router.post(
   validateRequest(userValidation.createAdminZodSchema),
   UserController.createAdminToDB
 )
+router.get('/all-user', UserController.getAllUsers)
 export default router

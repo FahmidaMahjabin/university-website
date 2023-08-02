@@ -1,8 +1,8 @@
 import { Schema, model } from 'mongoose'
-import { IUser, userModel } from './users.interface'
+import { IUser, IUserMethod, userModel } from './users.interface'
 import config from '../../config'
 import bcrypt from 'bcrypt'
-const userSchema = new Schema<IUser>(
+const userSchema = new Schema<IUser, IUserMethod, userModel>(
   {
     id: {
       type: String,
@@ -43,6 +43,22 @@ const userSchema = new Schema<IUser>(
 // User.create() and user.save() ei duita function e pre() method use kora jay. create model e and save() model theke instance create kore use korte hoy.
 // pre() function ta database e save or create er age kaj kore.
 // important note: this use korte hole normal function use korte hobe not arrow function
+userSchema.methods.isUserExist = async function (
+  id: string
+): Promise<Partial<IUser> | null> {
+  const user = await User.findOne(
+    { id },
+    { id: 1, password: 1, needPasswordChange: 1 }
+  )
+  return user
+}
+
+userSchema.methods.isPasswordMatch = async function (
+  givenPassword: string,
+  savedPassword: string
+): Promise<boolean> {
+  return await bcrypt.compare(givenPassword, savedPassword)
+}
 
 userSchema.pre('save', async function (next) {
   console.log('this from user:', this)

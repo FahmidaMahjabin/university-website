@@ -6,6 +6,7 @@ import { sendResponse } from '../../shared/sendResponse'
 import { IUser } from './users.interface'
 import { IFaculty } from '../faculty/faculty.interface'
 import { IAdmin } from '../admin/admin.interface'
+import { User } from './users.model'
 
 const createStudentToDB: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -46,8 +47,19 @@ const createAdminToDB = catchAsync(
     })
   }
 )
+const getAllUsers = catchAsync(async (req: Request, res: Response) => {
+  const result = await UserServices.getAllUsersfromDB()
+  console.log('all user from controller:', result)
+  sendResponse<IUser[]>(res, {
+    statusCode: 200,
+    success: true,
+    message: 'get all user successfully',
+    data: result,
+  })
+})
 export const UserController = {
   createStudentToDB,
   createFacultyToDB,
   createAdminToDB,
+  getAllUsers,
 }

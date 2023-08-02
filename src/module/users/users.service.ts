@@ -183,8 +183,14 @@ const createAdmin = async (
 
   return newUserAllData
 }
+const getAllUsersfromDB = async () => {
+  const result = await User.find({}).lean()
+  // console.log('all users:', result)
+  return result
+}
 export const UserServices = {
   createStudent,
   createFaculty,
   createAdmin,
+  getAllUsersfromDB,
 }

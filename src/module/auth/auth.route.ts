@@ -11,4 +11,4 @@ router.post(
   validateRequest(authValidation.authZodSchema),
   authController.createLogIn
 )
-export const facultyRoutes = router
+export const authRoutes = router
