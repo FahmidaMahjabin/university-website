@@ -12,6 +12,7 @@ const createStudentToDB: RequestHandler = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { student, ...userData } = await req.body
     logger.info(`data from controller ${student}, ${userData}`)
+    console.log('cookie:', req.cookies)
     const result = await UserServices.createStudent(student, userData)
     sendResponse<IUser>(res, {
       statusCode: 200,

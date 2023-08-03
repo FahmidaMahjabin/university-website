@@ -6,12 +6,13 @@ import { globalErrorHandler } from './middleware/GlobalErrorHandler'
 import routes from './routes/index'
 
 import httpStatus from 'http-status'
-
+import cookieParser from 'cookie-parser'
 const app = express()
 app.use(cors())
 // body perser
 app.use(express.json())
 app.use(express.urlencoded())
+app.use(cookieParser())
 // app route use
 app.use('/', routes)
 

@@ -1,7 +1,7 @@
 import httpStatus from 'http-status'
 import { ApiError } from '../../errrorHandlers/ApiErrorHandler'
 import { User } from '../users/users.model'
-import { ILoginData, loginResponse } from './auth.interface'
+import { ILoginData, IRefreshToken, loginResponse } from './auth.interface'
 import bcrypt from 'bcrypt'
 import jwt, { Secret } from 'jsonwebtoken'
 import config from '../../config'
@@ -15,9 +15,7 @@ import { jwtTokenCreate } from '../../helpers/jwtToken'
 // step5: if same then check if needPassword change or not
 // step6: if need to password change then take password input
 // step7: else give access token
-const createLogIntoDB = async (
-  data: ILoginData
-): Promise<loginResponse | null | undefined> => {
+const createLogIntoDB = async (data: ILoginData): Promise<loginResponse> => {
   const { id, password } = data
   console.log('data from auth service:', data)
   // check user exists
@@ -56,7 +54,7 @@ const createLogIntoDB = async (
     config.jwt.jwt_refresh_secret as Secret,
     config.jwt.jwt_refresh_expires_in as string
   )
-  console.log(accessToken, refreshToken, needPasswordChange)
+
   return {
     accessToken,
     refreshToken,
@@ -66,6 +64,34 @@ const createLogIntoDB = async (
 
 // login -->degault password -->needPasswordChange (true| false) --> true --> change password else login
 // otherwise always password change korte bolbe
+
+const createRefreshToken = async (token: string): Promise<IRefreshToken> => {
+  // verify token
+  let verifiedToken = null
+  try {
+    verifiedToken = jwt.verify(token, config.jwt.jwt_refresh_secret as Secret)
+    console.log('verifiedToken:', verifiedToken)
+  } catch (err) {
+    // err
+    throw new ApiError(httpStatus.FORBIDDEN, 'invalid refresh token')
+  }
+  // when the user is deleted but refresh token still exists
+  const { userId } = verifiedToken
+  const user = new User()
+  const isUserExist = await user.isUserExist(userId)
+  console.log('isUserExists:', isUserExist)
+  if (!isUserExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'user not found')
+  }
+  // generate accessToken
+  const newAccessToken = jwtTokenCreate(
+    { id: isUserExist?.id, role: isUserExist?.role },
+    config.jwt.jwt_secret as Secret,
+    config.jwt.jwt_expires_in as string
+  )
+  return { accessToken: newAccessToken }
+}
 export const authService = {
   createLogIntoDB,
+  createRefreshToken,
 }

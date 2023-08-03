@@ -10,5 +10,13 @@ router.post(
   '/login',
   validateRequest(authValidation.authZodSchema),
   authController.createLogIn
-)
+),
+  router.post(
+    '/refresh-token',
+    validateRequest(authValidation.refreshTokenZodSchema),
+    authController.createRefreshToken
+    // () => {
+    //   console.log('in route')
+    // }
+  )
 export const authRoutes = router

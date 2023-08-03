@@ -26,6 +26,7 @@ const createStudent = async (
   // hash the password
 
   console.log('student password:', user.password)
+
   // role
   user.role = 'student'
   //  get the academic semester for the student from database by searching by reference id in academicSemester

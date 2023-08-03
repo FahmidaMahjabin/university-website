@@ -4,6 +4,9 @@ export type ILoginData = {
 }
 export type loginResponse = {
   accessToken: string
-  refreshToken: string
+  refreshToken?: string
   needPasswordChange: boolean | undefined
+}
+export type IRefreshToken = {
+  accessToken: string
 }
