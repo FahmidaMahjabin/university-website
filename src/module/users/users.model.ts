@@ -23,9 +23,12 @@ const userSchema = new Schema<IUser, IUserMethod, userModel>(
       default: true,
       select: 0,
     },
+    passwordChangeAt: {
+      type: Date,
+    },
     student: {
       type: Schema.Types.ObjectId,
-      ref: 'student',
+      ref: 'students',
     },
     faculty: {
       type: Schema.Types.ObjectId,
@@ -57,6 +60,8 @@ userSchema.methods.isPasswordMatch = async function (
   givenPassword: string,
   savedPassword: string
 ): Promise<boolean> {
+  console.log('givenPassword:', givenPassword)
+  console.log('savedPassword:', savedPassword)
   return await bcrypt.compare(givenPassword, savedPassword)
 }
 

@@ -1,9 +1,14 @@
 import httpStatus from 'http-status'
 import { ApiError } from '../../errrorHandlers/ApiErrorHandler'
 import { User } from '../users/users.model'
-import { ILoginData, IRefreshToken, loginResponse } from './auth.interface'
+import {
+  ILoginData,
+  IRefreshToken,
+  changePassword,
+  loginResponse,
+} from './auth.interface'
 import bcrypt from 'bcrypt'
-import jwt, { Secret } from 'jsonwebtoken'
+import jwt, { JwtPayload, Secret } from 'jsonwebtoken'
 import config from '../../config'
 import { jwtTokenCreate } from '../../helpers/jwtToken'
 // function = createlogin
@@ -25,13 +30,23 @@ const createLogIntoDB = async (data: ILoginData): Promise<loginResponse> => {
   // ).lean()
   const user = new User()
   const isUserExist = await user.isUserExist(id)
-
+  console.log('isUserExist:', isUserExist)
   if (!isUserExist) {
     throw new ApiError(httpStatus.NOT_FOUND, "user doesn't exist")
   }
+  // console.log(
+  //   'user.isPasswordMatch(password, isUserExist?.password):',
+  //   user.isPasswordMatch(password, isUserExist?.password)
+  // )
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const passwordMatch = await user.isPasswordMatch(
+    password,
+    isUserExist.password!
+  )
+  console.log('passwordMatch:', passwordMatch)
   if (
     isUserExist?.password &&
-    !user.isPasswordMatch(password, isUserExist?.password)
+    !(await user.isPasswordMatch(password, isUserExist?.password))
   ) {
     throw new ApiError(httpStatus.NOT_ACCEPTABLE, 'incorrect password')
   }
@@ -54,7 +69,7 @@ const createLogIntoDB = async (data: ILoginData): Promise<loginResponse> => {
     config.jwt.jwt_refresh_secret as Secret,
     config.jwt.jwt_refresh_expires_in as string
   )
-
+  // console.log('accessToken:', accessToken)
   return {
     accessToken,
     refreshToken,
@@ -91,7 +106,45 @@ const createRefreshToken = async (token: string): Promise<IRefreshToken> => {
   )
   return { accessToken: newAccessToken }
 }
+// function = change password
+// input = user, old and new password
+// 1: check if the user exist
+// 2.if exist then check if the old password is correct with the saved password
+// 3.if same then hash the new password
+// 4. update and save the new password
+const changePassword = async (
+  userData: JwtPayload,
+  passwordData: changePassword
+) => {
+  const user = new User()
+  const isUserExist = await user.isUserExist(userData.userId)
+  if (!isUserExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, "user doesn't exist")
+  }
+  const matchedPassword = await user.isPasswordMatch(
+    passwordData.oldPassword,
+    isUserExist.password as string
+  )
+  if (!matchedPassword) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'old password is not same ')
+  }
+  const hashedPassword = await bcrypt.hash(
+    passwordData.newPassword,
+    Number(config.bcrypt_hash_salt_round)
+  )
+  const updateData = {
+    password: hashedPassword,
+    needPasswordChange: false,
+    passwordChangeAt: new Date(),
+  }
+  const updatedStudent = await User.findOneAndUpdate(
+    { id: userData.userId },
+    updateData
+  )
+  return updatedStudent
+}
 export const authService = {
   createLogIntoDB,
   createRefreshToken,
+  changePassword,
 }

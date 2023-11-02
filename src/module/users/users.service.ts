@@ -36,7 +36,7 @@ const createStudent = async (
   const session = await mongoose.startSession()
   let newUserAllData = null
   try {
-    session.startTransaction()
+    await session.startTransaction()
     const id = await createStudentId(academicSemester as IAcademicSemester)
     user.id = id as string
     student.id = id as string
@@ -54,28 +54,29 @@ const createStudent = async (
     // user --> student ---> academicSemister, academicFaculty, academicDepartment
     newUserAllData = newUser[0]
     console.log('newUseeAllData:', newUserAllData)
-    if (newUserAllData) {
-      newUserAllData.populate({
-        path: 'student',
-        populate: [
-          {
-            path: 'academicSemester',
-          },
-          {
-            path: 'academicDepartment',
-          },
-          {
-            path: 'academicFaculty',
-          },
-        ],
-      })
-    }
+
     await session.commitTransaction()
     await session.endSession()
   } catch (error) {
     await session.abortTransaction()
     await session.endSession()
     console.log('error:', error)
+  }
+  if (newUserAllData) {
+    newUserAllData.populate({
+      path: 'student',
+      populate: [
+        {
+          path: 'academicSemester',
+        },
+        {
+          path: 'academicDepartment',
+        },
+        {
+          path: 'academicFaculty',
+        },
+      ],
+    })
   }
 
   return newUserAllData

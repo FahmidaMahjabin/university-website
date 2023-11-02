@@ -4,6 +4,8 @@ import { sendResponse } from '../../shared/sendResponse'
 import { authService } from './auth.service'
 import { IRefreshToken, loginResponse } from './auth.interface'
 import config from '../../config'
+import { JwtPayload } from 'jsonwebtoken'
+import { IUser } from '../users/users.interface'
 
 const createLogIn = catchAsync(async (req: Request, res: Response) => {
   const { ...loginData } = req.body
@@ -40,7 +42,22 @@ const createRefreshToken = catchAsync(async (req: Request, res: Response) => {
     data: result,
   })
 })
+const changePassword = catchAsync(async (req: Request, res: Response) => {
+  const { ...passwordData } = req.body
+  const user = req.user
+  const result = await authService.changePassword(
+    user as JwtPayload,
+    passwordData
+  )
+  sendResponse<IUser>(res, {
+    statusCode: 200,
+    success: true,
+    message: 'login successfully',
+    data: result,
+  })
+})
 export const authController = {
   createLogIn,
   createRefreshToken,
+  changePassword,
 }

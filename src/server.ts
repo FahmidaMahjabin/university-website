@@ -22,6 +22,7 @@ async function connectToMongoose() {
   }
 
   process.on('unhandledRejection', error => {
+    console.log('error from server.ts:', error)
     console.log('unhandled rejection occured. server is closed')
     if (server) {
       server.close(() => {

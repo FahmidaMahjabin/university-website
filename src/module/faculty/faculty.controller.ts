@@ -10,6 +10,7 @@ import { filterableFields, paginationFields } from './faculty.constant'
 import { IFaculty } from './faculty.interface'
 
 const getAllFaculty = catchAsync(async (req: Request, res: Response) => {
+  console.log('req.user:', req.user)
   console.log('token from controller:', req.headers.authorization)
   const filters = mapReqQuerysProperty(req.query, filterableFields)
   const queryParameter = mapReqQuerysProperty(req.query, paginationFields)

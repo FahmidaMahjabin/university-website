@@ -8,6 +8,7 @@ export type IUser = {
   role: string
   password: string
   needPasswordChange: boolean
+  passwordChangeAt?: Date
   student?: Types.ObjectId | IStudent
   faculty?: Types.ObjectId | IFaculty
   admin?: Types.ObjectId | IAdmin
